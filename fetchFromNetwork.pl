@@ -4,7 +4,7 @@
 #                        parses the output for relative commands.
 #
 # Author            Emre Erkunt
-#                   (emre.erkunt@superonline.net)
+#                   (emre.erkunt@gmail.com)
 #
 # History :
 # -----------------------------------------------------------------------------------------------
@@ -896,7 +896,7 @@ sub usage {
 This script connects to IPs that are given as input file, then parses the output for relative commands.
 
 Author            Emre Erkunt
-                  (emre.erkunt@superonline.net)
+                  (emre.erkunt@gmail.com)
 
 Usage : fetchFromNetwork [-i INPUT FILE] [-v] [-o OUTPUT FILE] [-u USERNAME] [-p PASSWORD] [-t THREAD COUNT] [-g] [-a ACL FILE] [-n]
 
