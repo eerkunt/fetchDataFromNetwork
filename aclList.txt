@@ -1,0 +1,103 @@
+<huawei acl-adv>
+acl name upl-restrict-ip 3996
+ rule 5 permit ip destination 224.0.0.0 0.0.0.255
+ rule 5 description local-network-control
+acl name upl-permit-ip 3997
+ rule 5 permit ip destination 224.0.0.1 0
+ rule 5 description allsystems
+ rule 10 permit ip destination 224.0.0.2 0
+ rule 10 description allrouters
+ rule 15 permit ip destination 224.0.0.12 0
+ rule 15 description dhcpserverrelayagent
+ rule 20 permit ip destination 224.0.0.22 0
+ rule 20 description igmp
+ rule 25 permit ip destination 255.255.255.255 0
+ rule 25 description broadcast
+acl name restrict-ip 3998
+ rule 5 permit ip destination 100.96.0.0 0.31.255.255
+ rule 5 description all-ipoe
+acl name permit-ip 3999
+ rule 5 permit ip destination 224.0.0.1 0
+ rule 5 description allsystems
+ rule 10 permit ip destination 224.0.0.2 0
+ rule 10 description allrouters
+ rule 15 permit ip destination 224.0.0.12 0
+ rule 15 description dhcpserverrelayagent
+ rule 20 permit ip destination 224.0.0.22 0
+ rule 20 description igmp
+ rule 25 permit igmp
+ rule 25 description igmp-control
+ rule 30 permit ip destination 255.255.255.255 0
+ rule 30 description broadcast
+ rule 35 permit ip destination 100.96.0.0 0.31.252.3
+ rule 35 description router-gw
+return
+</huawei acl-adv>
+
+<huawei acl-l2>
+acl name any-ip-arp 4004
+ rule 5 permit l2-protocol arp
+ rule 10 permit l2-protocol ip
+acl name fake-mac 4001
+ rule 5 permit source-mac 0030-8800-0000 ffff-ff00-0000
+ rule 5 description to-redback
+ rule 10 permit source-mac ffff-ffff-ffff
+ rule 15 permit source-mac 0000-5e00-0100 ffff-ffff-ff00
+ rule 15 description to-vrrp
+ rule 20 permit l2-protocol ipv6
+ rule 20 description ipv6
+acl name pppoe-all 4003
+ rule 5 permit l2-protocol 0x8863
+ rule 10 permit l2-protocol 0x8864
+acl name pppoe-permit 4002
+ rule 5 permit l2-protocol 0x8863 destination-mac 0030-8800-0000 ffff-ff00-0000
+ rule 10 permit l2-protocol 0x8864 destination-mac 0030-8800-0000 ffff-ff00-0000
+ rule 15 permit destination-mac ffff-ffff-ffff
+return
+</huawei acl-l2>
+
+<cisco vlan103-ip-drop>
+    10 deny ip any host 224.0.0.1
+    20 deny ip any host 224.0.0.2
+    30 deny ip any host 224.0.0.12
+    40 deny ip any host 224.0.0.22
+    50 permit ip any 224.0.0.0 0.0.0.255
+</cisco vlan103-ip-drop>
+
+<cisco customers-inbound>
+    10 permit ip any host 255.255.255.255
+    20 permit igmp any any
+    30 permit ip any host 224.0.0.1
+    40 permit ip any host 224.0.0.2
+    50 permit ip any host 224.0.0.12
+    60 permit ip any host 224.0.0.22
+    70 deny ip any 224.0.0.0 31.255.255.255
+    80 permit ip any 100.96.0.0 0.31.252.3
+    90 deny ip any 100.96.0.0 0.31.255.255
+    100 permit ip any any
+</cisco customers-inbound>
+
+<cisco vlan103-mac-permit>
+    permit any host ffff.ffff.ffff
+    permit any any 0x10B 0x0
+    permit any any lsap 0x4242 0x0
+    permit any any lsap 0xAAAA 0x0
+    permit any any 0x806 0x0
+</cisco vlan103-mac-permit>
+
+<cisco fake-mac>
+    deny   any any 0x86DD 0x0
+    deny   0000.5e00.0100 0000.0000.00ff any
+    deny   0030.8800.0000 0000.00ff.ffff any
+    deny   host ffff.ffff.ffff any 0x8863 0x0
+    deny   host ffff.ffff.ffff any 0x8864 0x0
+    permit any host ffff.ffff.ffff 0x8863 0x0
+    permit any host ffff.ffff.ffff 0x8864 0x0
+    permit any 0030.8800.0000 0000.00ff.ffff 0x8863 0x0
+    permit any 0030.8800.0000 0000.00ff.ffff 0x8864 0x0
+    deny   any any 0x8863 0x0
+    deny   any any 0x8864 0x0
+    permit any any 0x806 0x0
+    permit any 0000.5e00.0100 0000.0000.00ff
+    permit any host ffff.ffff.ffff
+<cisco fake-mac>
