@@ -58,4 +58,5 @@ nw_sf_s033_a1.34_byld_yesil_a_7;172.28.191.193
 Few examples are given in the repository :
 
 * [Example #1](example_graph_output.html) ( larger )
+![Example #1](example_graph_output.png)
 * [Example #2](example_graph_output_2.html) ( smaller )
